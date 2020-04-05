@@ -16,7 +16,8 @@ services:
 
   php-fpm:
     build:
-      context: ./docker/php-fpm
+      context: .
+      dockerfile: docker/php-fpm/Dockerfile
     depends_on:
       - database
     environment:
