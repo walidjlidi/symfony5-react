@@ -9,3 +9,5 @@
 /vendor/
 ###< symfony/framework-bundle ###
 /react/node_modules
+
+/docker/database/data
