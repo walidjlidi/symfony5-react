@@ -1,9 +1,21 @@
-import logo200Image from 'assets/img/logo/logo_200.png';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Button, Form, FormGroup, Input, Label } from 'reactstrap';
+import axios from 'axios';
+import { Alert } from 'reactstrap';
 
 class AuthForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: '',
+      password: '',
+      message: '',
+    };
+  }
+
+  onChange = e => this.setState({ [e.target.name]: e.target.value });
+
   get isLogin() {
     return this.props.authState === STATE_LOGIN;
   }
@@ -14,12 +26,30 @@ class AuthForm extends React.Component {
 
   changeAuthState = authState => event => {
     event.preventDefault();
-
     this.props.onChangeAuthState(authState);
   };
 
   handleSubmit = event => {
     event.preventDefault();
+    const credentials = {
+      username: this.state.username,
+      password: this.state.password,
+    };
+    axios
+      .post(`http://vps723401.ovh.net/api/login_check`, credentials)
+      .then(res => {
+        this.setState({
+          message: '',
+        });
+        console.log(res);
+        console.log(res.data);
+      })
+      .catch(error => {
+        this.setState({
+          message: error.response.data.message,
+        });
+      });
+    console.log();
   };
 
   renderButtonText() {
@@ -38,7 +68,6 @@ class AuthForm extends React.Component {
 
   render() {
     const {
-      showLogo,
       usernameLabel,
       usernameInputProps,
       passwordLabel,
@@ -46,29 +75,20 @@ class AuthForm extends React.Component {
       confirmPasswordLabel,
       confirmPasswordInputProps,
       children,
-      onLogoClick,
     } = this.props;
 
     return (
       <Form onSubmit={this.handleSubmit}>
-        {showLogo && (
-          <div className="text-center pb-4">
-            <img
-              src={logo200Image}
-              className="rounded"
-              style={{ width: 60, height: 60, cursor: 'pointer' }}
-              alt="logo"
-              onClick={onLogoClick}
-            />
-          </div>
+        {this.state.message.length > 0 && (
+          <Alert color="danger"> {this.state.message}</Alert>
         )}
         <FormGroup>
           <Label for={usernameLabel}>{usernameLabel}</Label>
-          <Input {...usernameInputProps} />
+          <Input {...usernameInputProps} onChange={this.onChange} />
         </FormGroup>
         <FormGroup>
           <Label for={passwordLabel}>{passwordLabel}</Label>
-          <Input {...passwordInputProps} />
+          <Input {...passwordInputProps} onChange={this.onChange} />
         </FormGroup>
         {this.isSignup && (
           <FormGroup>
@@ -87,7 +107,8 @@ class AuthForm extends React.Component {
           size="lg"
           className="bg-gradient-theme-left border-0"
           block
-          onClick={this.handleSubmit}>
+          onClick={this.handleSubmit}
+        >
           {this.renderButtonText()}
         </Button>
 
@@ -131,12 +152,15 @@ AuthForm.defaultProps = {
   authState: 'LOGIN',
   showLogo: true,
   usernameLabel: 'Email',
+  username: 'username',
   usernameInputProps: {
+    name: 'username',
     type: 'email',
     placeholder: 'your@email.com',
   },
   passwordLabel: 'Password',
   passwordInputProps: {
+    name: 'password',
     type: 'password',
     placeholder: 'your password',
   },
