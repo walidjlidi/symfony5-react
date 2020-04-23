@@ -14,6 +14,13 @@ class AuthForm extends React.Component {
     };
   }
 
+  static isUserLoggedIn() {
+    //if()
+    const token = window.localStorage.getItem('token');
+
+    return token && token.length > 0 ? true : false;
+  }
+
   onChange = e => this.setState({ [e.target.name]: e.target.value });
 
   get isLogin() {
@@ -41,13 +48,18 @@ class AuthForm extends React.Component {
         this.setState({
           message: '',
         });
-        console.log(res);
-        console.log(res.data);
+        window.localStorage.setItem('token', res.data.token);
+
+        const { currentState } = this.props.location;
+        window.location = currentState ? currentState.from.pathname : '/';
       })
       .catch(error => {
-        this.setState({
-          message: error.response.data.message,
-        });
+        console.log(error);
+        if (error.response.data.message) {
+          this.setState({
+            message: error.response.data.message,
+          });
+        }
       });
     console.log();
   };

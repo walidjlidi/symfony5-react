@@ -156,7 +156,12 @@ class Header extends React.Component {
                     <ListGroupItem tag="button" action className="border-light">
                       <MdHelp /> Help
                     </ListGroupItem>
-                    <ListGroupItem tag="button" action className="border-light">
+                    <ListGroupItem
+                      tag="a"
+                      action
+                      className="border-light"
+                      href="/logout"
+                    >
                       <MdExitToApp /> Signout
                     </ListGroupItem>
                   </ListGroup>

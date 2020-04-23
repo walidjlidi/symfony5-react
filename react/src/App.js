@@ -1,11 +1,13 @@
 import { STATE_LOGIN, STATE_SIGNUP } from 'components/AuthForm';
 import GAListener from 'components/GAListener';
 import { EmptyLayout, LayoutRoute, MainLayout } from 'components/Layout';
+import ProtectedRoute from 'components/Layout/ProtectedRoute';
 import PageSpinner from 'components/PageSpinner';
 import AuthPage from 'pages/AuthPage';
+import Logout from 'components/Logout';
 import React from 'react';
 import componentQueries from 'react-component-queries';
-import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Redirect, Switch } from 'react-router-dom';
 import './styles/reduction.scss';
 
 const AlertPage = React.lazy(() => import('pages/AlertPage'));
@@ -54,26 +56,47 @@ class App extends React.Component {
 
             <MainLayout breakpoint={this.props.breakpoint}>
               <React.Suspense fallback={<PageSpinner />}>
-                <Route exact path="/" component={DashboardPage} />
-                <Route exact path="/login-modal" component={AuthModalPage} />
-                <Route exact path="/buttons" component={ButtonPage} />
-                <Route exact path="/cards" component={CardPage} />
-                <Route exact path="/widgets" component={WidgetPage} />
-                <Route exact path="/typography" component={TypographyPage} />
-                <Route exact path="/alerts" component={AlertPage} />
-                <Route exact path="/tables" component={TablePage} />
-                <Route exact path="/badges" component={BadgePage} />
-                <Route
+                <ProtectedRoute exact path="/" component={DashboardPage} />
+                <ProtectedRoute
+                  exact
+                  path="/login-modal"
+                  component={AuthModalPage}
+                />
+                <ProtectedRoute exact path="/buttons" component={ButtonPage} />
+                <ProtectedRoute exact path="/cards" component={CardPage} />
+                <ProtectedRoute exact path="/widgets" component={WidgetPage} />
+                <ProtectedRoute
+                  exact
+                  path="/typography"
+                  component={TypographyPage}
+                />
+                <ProtectedRoute exact path="/alerts" component={AlertPage} />
+                <ProtectedRoute exact path="/tables" component={TablePage} />
+                <ProtectedRoute exact path="/badges" component={BadgePage} />
+                <ProtectedRoute
                   exact
                   path="/button-groups"
                   component={ButtonGroupPage}
                 />
-                <Route exact path="/dropdowns" component={DropdownPage} />
-                <Route exact path="/progress" component={ProgressPage} />
-                <Route exact path="/modals" component={ModalPage} />
-                <Route exact path="/forms" component={FormPage} />
-                <Route exact path="/input-groups" component={InputGroupPage} />
-                <Route exact path="/charts" component={ChartPage} />
+                <ProtectedRoute
+                  exact
+                  path="/dropdowns"
+                  component={DropdownPage}
+                />
+                <ProtectedRoute
+                  exact
+                  path="/progress"
+                  component={ProgressPage}
+                />
+                <ProtectedRoute exact path="/modals" component={ModalPage} />
+                <ProtectedRoute exact path="/forms" component={FormPage} />
+                <ProtectedRoute
+                  exact
+                  path="/input-groups"
+                  component={InputGroupPage}
+                />
+                <ProtectedRoute exact path="/charts" component={ChartPage} />
+                <ProtectedRoute exact path="/logout" component={Logout} />
               </React.Suspense>
             </MainLayout>
             <Redirect to="/" />
